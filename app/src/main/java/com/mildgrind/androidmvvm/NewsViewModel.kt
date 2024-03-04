@@ -9,18 +9,11 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 class NewsViewModel : ViewModel() {
-    private val _textLiveData = MutableLiveData<String>()
     private val _apiKey = "pub_39332ba43168174b2635dc66f444711a6c1f3"
     private val _url = "https://newsdata.io/api/1/news?apikey=$_apiKey&q=Swift"
     private val _tag = "MVVM"
-    val textLiveData: LiveData<String>
-        get() = _textLiveData
 
-    fun setText(value: String) {
-        _textLiveData.value = value
-    }
-
-    fun jsonStringToMapWithGson(json: String): Map<String, Any> {
+    private fun jsonStringToMapWithGson(json: String): Map<String, Any> {
         val gson = Gson()
         val type = object : TypeToken<Map<String, Any>>() {}.type
         return gson.fromJson(json, type)
@@ -52,10 +45,5 @@ class NewsViewModel : ViewModel() {
                     completionCallback(newsList)
                 }
             }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        Log.i("mvvm", "clear view-model")
     }
 }

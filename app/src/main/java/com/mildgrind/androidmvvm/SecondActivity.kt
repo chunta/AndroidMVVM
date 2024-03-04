@@ -21,13 +21,24 @@ class SecondActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         viewModel = ViewModelProvider(this)[NewsViewModel::class.java]
-        viewModel.setText("Hello Money")
 
-        // Perform any initialization or setup logic here
-        // For example, you could set the activity's title
         title = "Second Activity"
 
-        // Create a vertical LinearLayout as the root layout
+        createNewsList()
+
+        fetchNews()
+    }
+
+    private fun fetchNews() {
+        viewModel.fetchNews { newsList ->
+            Log.i("MVVM", newsList.size.toString())
+            runOnUiThread {
+                recyclerView.adapter = NewsAdapter(newsList)
+            }
+        }
+    }
+
+    private fun createNewsList() {
         val rootLayout = LinearLayout(this)
         rootLayout.orientation = LinearLayout.VERTICAL
         setContentView(rootLayout)
@@ -44,15 +55,6 @@ class SecondActivity : AppCompatActivity() {
 
         adapter = NewsAdapter(emptyList()) // Initially, the adapter is empty
         recyclerView.adapter = adapter
-
-        // You can also finish the activity immediately if needed
-        // finish()
-        viewModel.fetchNews { newsList ->
-            Log.i("MVVM", newsList.size.toString())
-            runOnUiThread {
-                recyclerView.adapter = NewsAdapter(newsList)
-            }
-        }
     }
 }
 
