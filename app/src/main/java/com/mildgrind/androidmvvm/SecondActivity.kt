@@ -62,15 +62,12 @@ class NewsAdapter(private val newsList: List<NewsArticle>) :
     holder.urlTextView.text = if (news.description.isNotEmpty()) {
         news.description
     } else {
-        val creator = news.creator ?: ""
-        val pubDate = news.pubDate ?: ""
-        if (creator.isNotEmpty() && pubDate.isNotEmpty()) {
-            "$creator $pubDate"
+        if (news.creator.isNotEmpty() && news.pubDate.isNotEmpty()) {
+            "${news.creator} | ${news.pubDate}"
         } else {
             news.link
         }
     }
-    Log.i("MVVM", "${news.creator} ${news.pubDate}")
 }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
