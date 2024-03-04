@@ -1,4 +1,5 @@
 package com.mildgrind.androidmvvm
+
 data class NewsArticle(
     val articleId: String,
     val title: String,
@@ -6,5 +7,5 @@ data class NewsArticle(
     val description: String,
     val creator: String,
     val pubDate: String,
-    val link: String
+    val link: String,
 )

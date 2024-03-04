@@ -1,16 +1,12 @@
 package com.mildgrind.androidmvvm
 
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.recyclerview.widget.RecyclerView
 import com.github.kittinunf.fuel.Fuel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import org.json.JSONObject
 
 class NewsViewModel : ViewModel() {
     private val _textLiveData = MutableLiveData<String>()
@@ -23,11 +19,13 @@ class NewsViewModel : ViewModel() {
     fun setText(value: String) {
         _textLiveData.value = value
     }
+
     fun jsonStringToMapWithGson(json: String): Map<String, Any> {
         val gson = Gson()
         val type = object : TypeToken<Map<String, Any>>() {}.type
         return gson.fromJson(json, type)
     }
+
     fun fetchNews(completionCallback: (List<NewsArticle>) -> Unit) {
         Fuel.get(_url)
             .response { request, response, result ->
@@ -37,25 +35,27 @@ class NewsViewModel : ViewModel() {
                 if (bytes != null) {
                     val responseData = String(bytes)
                     var newsMap = jsonStringToMapWithGson(responseData)
-                    val resultList = (newsMap["results"] as? ArrayList<Map<String, Any>>) ?: ArrayList()
-                    val newsList = resultList.map { item ->
-                        NewsArticle(
-                            articleId = item.getOrElse("article_id") { "" }.toString(),
-                            title = item.getOrElse("title") { "" }.toString(),
-                            sourceUrl = item.getOrElse("source_url") { "" }.toString(),
-                            creator = item.getOrElse("creator") { "" }.toString(),
-                            description = item.getOrElse("description") { "" }.toString(),
-                            pubDate = item.getOrElse("pubDate") { "" }.toString(),
-                            link = item.getOrElse("link") { "" }.toString()
-                        )
-                    }
+                    val resultList =
+                        (newsMap["results"] as? ArrayList<Map<String, Any>>) ?: ArrayList()
+                    val newsList =
+                        resultList.map { item ->
+                            NewsArticle(
+                                articleId = item.getOrElse("article_id") { "" }.toString(),
+                                title = item.getOrElse("title") { "" }.toString(),
+                                sourceUrl = item.getOrElse("source_url") { "" }.toString(),
+                                creator = item.getOrElse("creator") { "" }.toString(),
+                                description = item.getOrElse("description") { "" }.toString(),
+                                pubDate = item.getOrElse("pubDate") { "" }.toString(),
+                                link = item.getOrElse("link") { "" }.toString(),
+                            )
+                        }
                     completionCallback(newsList)
                 }
             }
     }
+
     override fun onCleared() {
         super.onCleared()
-        //Log.i("Cleared view-model")
         Log.i("mvvm", "clear view-model")
     }
 }

@@ -1,0 +1,19 @@
+# .editorconfig
+
+# Top-most EditorConfig file
+root = true
+
+# Matches all files
+[*]
+
+# ktlint configuration
+ktlint_version = 0.41.0
+indent_style = space
+indent_size = 4
+max_line_length = off
+
+# Disable specific ktlint rules
+ktlint_import_layout_multiline = true
+ktlint_no_line_break_before_else = true
+
+ktlint_standard_no-wildcard-imports = disabled
